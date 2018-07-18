@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, TextInput} from 'react-native';
-import {Button} from '../utility components'
+import {StyleSheet, View, TextInput, Image} from 'react-native';
+import {Button} from '../utility components';
 
 export default class Login extends Component{
   constructor(props){
@@ -15,6 +15,8 @@ export default class Login extends Component{
     console.log(styles.button)
     return (
       <View style={styles.container}>
+        <Image resizeMethod='auto' style={styles.image} 
+               source={require('../public/images/combo.png')} />
         <TextInput onChangeText={(text)=>this.setState({username: text})} 
                    placeholder='Username' 
                    underlineColorAndroid='transparent' 
@@ -23,8 +25,7 @@ export default class Login extends Component{
                    placeholder='Password' 
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
-        <Button title="Log In" />
-        <Text>Shake your phone to open the developer menu.</Text>
+        <Button style={styles.button} title="Log In" />
       </View>
     )
   }
@@ -46,10 +47,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
   button: {
-    color: 'white',
-    width: 100,
+    width: 200,
     height: 20,
     margin: 10,
     borderRadius: 10,
+  },
+  image: {
+    margin: 25,
+    width: 175,
+    height: 275
   }
 });

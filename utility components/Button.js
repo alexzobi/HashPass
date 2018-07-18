@@ -1,37 +1,19 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 export default class Button extends Component {
   constructor(props){
     super(props);
-    this.state ={
-      style: {},
+    this.style = props.style;
     }
-    // console.log('props keys', Object.keys(props))
-
-
-    // this.color = style.color || 'white'
-    // this.backgroundColor = style.backgroundColor || 
-    // this.color = style.color;
-    // this.borderRadius = style.borderRadius;
-    // this.margin =style.margin || 0;
-    // this.width = style.width || 100;
-    // this.height = style.height || 5;
-    
-    // this.title = props.title;
-
-  }
-  componentDidMount(props){
-    console.log('style keys', props)
-
-  }
 
   render(){
-    console.log('styles at button', this.state.style)
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>{this.props.title}</Text>
-      </View>
+      <TouchableOpacity activeOpacity={0.5} onPress={()=>console.log('pressed')} >
+        <View style={[styles.container, this.style]}>
+          <Text style={styles.text}>{this.props.title}</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 };
@@ -51,6 +33,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 20
   }
 });
