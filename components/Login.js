@@ -7,12 +7,29 @@ export default class Login extends Component{
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      passHide: ""
     };
   }
 
+  handleClick = ()=>{
+    const {username, password} = this.state;
+    console.log(username, password)
+  }
+
+  hidePassword = (text)=>{
+    let {password, passHide} = this.state;
+    if(text.length<password.length){
+      password = password.substr(0,text.length);
+    } else {
+      password += text[text.length-1];
+    }
+    passHide = "*".repeat(password.length);
+    this.setState({passHide,password});
+  }
+  
   render(){
-    console.log(styles.button)
+    console.log(this.state.password);
     return (
       <View style={styles.container}>
         <Image resizeMethod='auto' style={styles.image} 
@@ -21,11 +38,12 @@ export default class Login extends Component{
                    placeholder='Username' 
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
-        <TextInput onChangeText={(text)=>this.setState({password: text})} 
-                   placeholder='Password' 
+        <TextInput onChangeText={(text)=>this.hidePassword(text)}
+                   value={this.state.passHide} 
+                   placeholder='Password'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
-        <Button style={styles.button} title="Log In" />
+        <Button onPress={this.handleClick}style={styles.button} title="Log In" />
       </View>
     )
   }

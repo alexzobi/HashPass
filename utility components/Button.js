@@ -5,11 +5,12 @@ export default class Button extends Component {
   constructor(props){
     super(props);
     this.style = props.style;
+    this.onPress = props.onPress;
     }
 
   render(){
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={()=>console.log('pressed')} >
+      <TouchableOpacity activeOpacity={0.5} onPress={this.onPress} >
         <View style={[styles.container, this.style]}>
           <Text style={styles.text}>{this.props.title}</Text>
         </View>
