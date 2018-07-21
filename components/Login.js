@@ -1,20 +1,52 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, TextInput, Image} from 'react-native';
+import {StyleSheet, View, 
+        TextInput, Image, 
+        TouchableOpacity, Text,
+        AsyncStorage} from 'react-native';
 import {Button} from '../utility components';
+
+const initialState = {
+  username: "",
+  password: "",
+  passHide: "",
+  reEnter: "",
+  reEnterHide: "",
+  login: true
+};
 
 export default class Login extends Component{
   constructor(props){
     super(props);
-    this.state = {
-      username: "",
-      password: "",
-      passHide: ""
-    };
+    this.state = initialState;
   }
 
-  handleClick = ()=>{
-    const {username, password} = this.state;
-    console.log(username, password)
+  handleClick = async ()=>{
+    const {username, password, reEnter} = this.state;
+    if(this.state.login){
+      console.log(username, password);
+      try {
+        let {username,password} = this.state
+        let user = await AsyncStorage.getItem(username);
+        let data = JSON.parse(user);
+        if(data.password===password){
+          alert('You Logged In!!!');
+        } else {
+          alert('Back, you fiend of Hell!!!');
+        }
+      }
+      
+      catch(error){
+        alert(error);
+      } 
+    } else {
+      if(password===reEnter){
+        let userObj = {password}
+        AsyncStorage.setItem(username, JSON.stringify(userObj))
+      } else {
+        alert('Passwords Do Not Match')
+      }
+    }
+    this.setState(initialState);
   }
 
   hidePassword = (text)=>{
@@ -27,23 +59,50 @@ export default class Login extends Component{
     passHide = "*".repeat(password.length);
     this.setState({passHide,password});
   }
+
+  hideReEnter = (text)=>{
+    let {reEnter, reEnterHide} = this.state;
+    if(text.length<reEnter.length){
+      reEnter = reEnter.substr(0,text.length);
+    } else {
+      reEnter += text[text.length-1];
+    }
+    reEnterHide = "*".repeat(reEnter.length);
+    this.setState({reEnterHide,reEnter});
+  }
+
+  toggleLogin = () =>{
+    let status = this.state.login;
+    this.setState({login: !status})
+  }
   
   render(){
-    console.log(this.state.password);
+    const {username,login, passHide,reEnterHide} = this.state;
     return (
       <View style={styles.container}>
-        <Image resizeMethod='auto' style={styles.image} 
+        <Image resizeMethod='auto' style={styles.logo} 
                source={require('../public/images/combo.png')} />
         <TextInput onChangeText={(text)=>this.setState({username: text})} 
-                   placeholder='Username' 
+                   placeholder='Username'
+                   value={username} 
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         <TextInput onChangeText={(text)=>this.hidePassword(text)}
-                   value={this.state.passHide} 
+                   value={passHide} 
                    placeholder='Password'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
-        <Button onPress={this.handleClick}style={styles.button} title="Log In" />
+        { login ? null : 
+          <TextInput onChangeText={(text)=>this.hideReEnter(text)}
+                     value={reEnterHide} 
+                     placeholder='Re-Enter Pass'
+                     underlineColorAndroid='transparent' 
+                     style={styles.input}/>
+        }
+        <Button onPress={this.handleClick}style={styles.login} title={login? "Log In" : "Create Account"} />
+        <TouchableOpacity style={styles.signup} onPress={this.toggleLogin}>
+          <Text>{login? "Create Account" : "Log In"}</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -53,10 +112,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   input: {
-    margin: 10,
+    marginBottom: 15,
     backgroundColor: 'white',
     borderRadius: 10,
     width: 275,
@@ -64,15 +123,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 30,
   },
-  button: {
+  login: {
     width: 200,
     height: 20,
-    margin: 10,
+    marginBottom: 15,
     borderRadius: 10,
   },
-  image: {
-    margin: 25,
+  logo: {
+    margin: 30,
     width: 175,
     height: 275
+  },
+  signup: {
+    padding: 10
   }
 });
