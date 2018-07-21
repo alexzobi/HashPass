@@ -36,16 +36,28 @@ export default class Login extends Component{
       }
       
       catch(error){
-        alert(error);
+        alert('User Does Not Exist');
       } 
     } else {
-      if(password===reEnter){
-        let userObj = {password}
-        AsyncStorage.setItem(username, JSON.stringify(userObj))
-      } else {
-        alert('Passwords Do Not Match')
-      }
+      try {
+        let user = await AsyncStorage.getItem(username)
+        if (user===null){
+          if(password===reEnter){
+            let userObj = {password}
+            AsyncStorage.setItem(username, JSON.stringify(userObj))
+          } else {
+            alert('Passwords Do Not Match');
+          }
+        } else {
+          alert('User already exists');
+        }
+      } 
+      
+      catch(error){
+        alert(error);
+      }   
     }
+
     this.setState(initialState);
   }
 
