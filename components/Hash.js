@@ -2,27 +2,39 @@ import React, {Component} from 'react';
 import {StyleSheet, View, 
         TouchableOpacity, Text, TextInput} from 'react-native';
 import {Button} from '../utility components';
+import {hash} from '../utility functions';
 
 export default class Hash extends Component{
   constructor(props){
     super(props);
     this.state = {
-      salt: "",
+      account: '',
+      salt: '',
+      length: null
     }
   }
 
   handleClick = ()=>{
-    let password = 'Ang3lpup';
-    let salt = this.state.salt;
-    // const key = pbkdf2Sync(password, salt, 100000, 24, 'sha512');
-    // alert(key.toString('hex'));
+    let password = '';
+    let {salt, length} = this.state;
+
+    const key = hash(password, salt, length);
+    alert(key);
   }
 
   render(){
     return (
       <View style={styles.container}>
+        <TextInput onChangeText={(text)=>this.setState({account: text})} 
+                   placeholder='Account'
+                   underlineColorAndroid='transparent' 
+                   style={styles.input}/>
         <TextInput onChangeText={(text)=>this.setState({salt: text})} 
-                   placeholder='Add Salt'
+                   placeholder='Salt'
+                   underlineColorAndroid='transparent' 
+                   style={styles.input}/>
+        <TextInput onChangeText={(text)=>this.setState({length: text})} 
+                   placeholder='Length'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         <Button style={styles.hash} 
