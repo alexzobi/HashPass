@@ -6,11 +6,12 @@ import {Button} from '../utility components';
 export default class Menu extends Component{
 
   render(){
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <Button style={styles.hash} 
                 title="Hash A Pass" 
-                onPress={()=>console.log("Hash that shizz")}/>
+                onPress={()=>navigate('Hash')}/>
         <Button style={styles.check} 
                 title="Check A Pass" 
                 onPress={()=>console.log("check")}/>
@@ -18,7 +19,7 @@ export default class Menu extends Component{
                 title="Explain To Me" 
                 onPress={()=>console.log("HALLLPPPP")}/>
         <TouchableOpacity style={styles.logout} 
-                          onPress={()=>console.log('logout')}>
+                          onPress={()=>navigate('Login')}>
           <Text>Log Out</Text>
         </TouchableOpacity>
       </View>

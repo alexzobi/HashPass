@@ -22,14 +22,14 @@ export default class Login extends Component{
 
   handleClick = async ()=>{
     const {username, password, reEnter} = this.state;
+    const { navigate } = this.props.navigation;
     if(this.state.login){
-      console.log(username, password);
       try {
         let {username,password} = this.state
         let user = await AsyncStorage.getItem(username);
         let data = JSON.parse(user);
         if(data.password===password){
-          alert('You Logged In!!!');
+          navigate('Menu');
         } else {
           alert('Back, you fiend of Hell!!!');
         }

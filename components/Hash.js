@@ -23,6 +23,7 @@ export default class Hash extends Component{
   }
 
   render(){
+    const { navigate, goBack } = this.props.navigation;
     return (
       <View style={styles.container}>
         <TextInput onChangeText={(text)=>this.setState({account: text})} 
@@ -40,8 +41,13 @@ export default class Hash extends Component{
         <Button style={styles.hash} 
                 title="Hash It!" 
                 onPress={this.handleClick}/>
-        <TouchableOpacity style={styles.logout} 
-                          onPress={()=>console.log('logout')}>
+
+        <TouchableOpacity style={styles.leave} 
+                          onPress={()=>goBack()}>
+          <Text>Back to Menu</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.leave} 
+                          onPress={()=>navigate('Login')}>
           <Text>Log Out</Text>
         </TouchableOpacity>
       </View>
@@ -71,4 +77,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderRadius: 10,
   },
+  leave: {
+    padding: 10
+  }
 });
