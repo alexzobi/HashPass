@@ -10,20 +10,22 @@ export default class Hash extends Component{
     this.state = {
       account: '',
       salt: '',
-      length: null
+      length: null,
+      hashedPass: ''
     }
   }
 
   handleClick = ()=>{
-    let password = '';
-    let {salt, length} = this.state;
-
-    const key = hash(password, salt, length);
-    alert(key);
+    const {salt, length} = this.state;
+    const password = this.props.navigation.getParam('password','');
+    const user = this.props.navigation.getParam('user','');
+    const hashedPass = hash(password, salt, length);
+    this.setState({hashedPass})
   }
 
   render(){
     const { navigate, goBack } = this.props.navigation;
+    const { hashedPass } = this.state;
     return (
       <View style={styles.container}>
         <TextInput onChangeText={(text)=>this.setState({account: text})} 
@@ -38,6 +40,9 @@ export default class Hash extends Component{
                    placeholder='Length'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
+        <TextInput style={[styles.input, {fontSize:15}]} 
+                   value={hashedPass ? hashedPass:"Result"}
+                   underlineColorAndroid='transparent' />
         <Button style={styles.hash} 
                 title="Hash It!" 
                 onPress={this.handleClick}/>
@@ -58,10 +63,14 @@ export default class Hash extends Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#E8423F',
     alignItems: 'center',
     justifyContent: 'center',
   },
   input: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 15,
     backgroundColor: 'white',
     borderRadius: 10,

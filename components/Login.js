@@ -29,7 +29,7 @@ export default class Login extends Component{
         let user = await AsyncStorage.getItem(username);
         let data = JSON.parse(user);
         if(data.password===password){
-          navigate('Menu');
+          navigate('Menu',{user, password});
         } else {
           this.setState(initialState);
           alert('Back, you fiend of Hell!!!');
