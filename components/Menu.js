@@ -17,7 +17,7 @@ export default class Menu extends Component{
                   onPress={()=>navigate('Hash',{user, password})}/>
           <Button style={styles.check} 
                   title="Check A Pass" 
-                  onPress={()=>console.log("check")}/>
+                  onPress={()=>navigate('Check',{user, password})}/>
           <Button style={styles.help} 
                   title="Explain To Me" 
                   onPress={()=>console.log("HALLLPPPP")}/>
