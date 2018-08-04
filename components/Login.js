@@ -31,11 +31,13 @@ export default class Login extends Component{
         if(data.password===password){
           navigate('Menu');
         } else {
+          this.setState(initialState);
           alert('Back, you fiend of Hell!!!');
         }
       }
       
       catch(error){
+        this.setState(initialState);
         alert('User Does Not Exist');
       } 
     } else {
@@ -46,9 +48,11 @@ export default class Login extends Component{
             let userObj = {password}
             AsyncStorage.setItem(username, JSON.stringify(userObj))
           } else {
+            this.setState(initialState);
             alert('Passwords Do Not Match');
           }
         } else {
+          this.setState(initialState);
           alert('User already exists');
         }
       } 
@@ -57,8 +61,6 @@ export default class Login extends Component{
         alert(error);
       }   
     }
-
-    this.setState(initialState);
   }
 
   hidePassword = (text)=>{
@@ -123,6 +125,7 @@ export default class Login extends Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#E8423F',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },

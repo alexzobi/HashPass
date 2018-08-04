@@ -9,19 +9,21 @@ export default class Menu extends Component{
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Button style={styles.hash} 
-                title="Hash A Pass" 
-                onPress={()=>navigate('Hash')}/>
-        <Button style={styles.check} 
-                title="Check A Pass" 
-                onPress={()=>console.log("check")}/>
-        <Button style={styles.help} 
-                title="Explain To Me" 
-                onPress={()=>console.log("HALLLPPPP")}/>
-        <TouchableOpacity style={styles.logout} 
-                          onPress={()=>navigate('Login')}>
-          <Text>Log Out</Text>
-        </TouchableOpacity>
+        <View style={styles.menu}>
+          <Button style={styles.hash} 
+                  title="Hash A Pass" 
+                  onPress={()=>navigate('Hash')}/>
+          <Button style={styles.check} 
+                  title="Check A Pass" 
+                  onPress={()=>console.log("check")}/>
+          <Button style={styles.help} 
+                  title="Explain To Me" 
+                  onPress={()=>console.log("HALLLPPPP")}/>
+          <TouchableOpacity style={styles.logout} 
+                            onPress={()=>navigate('Login')}>
+            <Text>Log Out</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
@@ -30,7 +32,12 @@ export default class Menu extends Component{
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
+    backgroundColor: '#E8423F',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menu: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
