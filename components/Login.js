@@ -4,6 +4,7 @@ import {StyleSheet, View,
         TouchableOpacity, Text,
         AsyncStorage} from 'react-native';
 import {Button} from '../utility components';
+import store, { setUser } from '../store';
 
 const initialState = {
   username: "",
@@ -20,6 +21,14 @@ export default class Login extends Component{
     this.state = initialState;
   }
 
+  componentDidMount(){
+    this.unsubscribe = store.subscribe(()=> this.setState(store.getState()))
+  }
+
+  componentWillUnmount(){
+    this.unsubscribe();
+  }
+
   handleClick = async ()=>{
     const {username, password, reEnter} = this.state;
     const { navigate } = this.props.navigation;
@@ -28,9 +37,10 @@ export default class Login extends Component{
         let {username,password} = this.state
         let user = await AsyncStorage.getItem(username);
         user = JSON.parse(user);
-        console.log(user);
+        console.log('longin',user);
         if(user.password===password){
-          navigate('Menu',{user, password, username});
+          store.dispatch(setUser(username, user));
+          navigate('Menu');
         } else {
           this.setState(initialState);
           alert('Back, you fiend of Hell!!!');
@@ -49,7 +59,7 @@ export default class Login extends Component{
           if(password===reEnter){
             user = {password,accounts:{}}
             AsyncStorage.setItem(username, JSON.stringify(user))
-            navigate('Menu',{user, password, username});
+            navigate('Menu');
           } else {
             this.setState(initialState);
             alert('Passwords Do Not Match');

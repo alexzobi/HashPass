@@ -3,23 +3,33 @@ import {StyleSheet, View,
         TouchableOpacity, Text, TextInput} from 'react-native';
 import {Button} from '../utility components';
 import {hash} from '../utility functions';
+import store from '../store';
 
 export default class Check extends Component{
   constructor(props){
     super(props);
     this.state = {
       account: '',
-      hashedPass:''
+      hashedPass:'',
+      user: store.getState()
     }
   }
 
+  componentDidMount () {
+    this.unsubscribe = store.subscribe(() => this.setState({user: store.getState()}));
+  }
+
+  componentWillUnmount () {
+    this.unsubscribe();
+  }
+
   handleClick = ()=>{
-    const { account } = this.state;
-    const password = this.props.navigation.getParam('password','');
-    const user = this.props.navigation.getParam('user','');
-    const { salt, length } = user.accounts[account]
-    const hashedPass = hash(password, salt, length);
-    this.setState({hashedPass})
+    const { account, user } = this.state;
+    // const password = this.props.navigation.getParam('password','');
+    // const user = this.props.navigation.getParam('user','');
+    const { salt, length } = user.details.accounts[account];
+    const hashedPass = hash(user.details.password, salt, length);
+    this.setState({hashedPass});
   }
 
   render(){

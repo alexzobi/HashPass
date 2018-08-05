@@ -5,6 +5,7 @@ import {StyleSheet, View,
         AsyncStorage} from 'react-native';
 import {Button} from '../utility components';
 import {hash} from '../utility functions';
+import store from '../store';
 
 export default class Hash extends Component{
   constructor(props){
@@ -13,23 +14,28 @@ export default class Hash extends Component{
       account: '',
       salt: '',
       length: null,
-      hashedPass: ''
+      hashedPass: '',
+      user: store.getState()
     }
   }
 
-  handleClick = async ()=>{
-    const {salt, length, account} = this.state;
-    const password = this.props.navigation.getParam('password','');
-    const user = this.props.navigation.getParam('user','');
-    const username = this.props.navigation.getParam('username','');
+  componentDidMount () {
+    this.unsubscribe = store.subscribe(() => this.setState({user: store.getState()}));
+  }
 
-    const hashedPass = hash(password, salt, length);
+  componentWillUnmount () {
+    this.unsubscribe();
+  }
+
+  handleClick = async ()=>{
+    const {salt, length, account, user} = this.state;
+    const hashedPass = hash(user.details.password, salt, length);
     this.setState({hashedPass})
-    user.accounts[account] = {salt, length}
-    console.log('hash click', username, user)
+    user.details.accounts[account] = {salt, length};
+    console.log('store state', user)
     try {
-      await AsyncStorage.setItem(username, JSON.stringify(user),() => {
-        AsyncStorage.getItem(username, (err, result) => {
+      await AsyncStorage.setItem(user.username, JSON.stringify(user.details),() => {
+        AsyncStorage.getItem(user.username, (err, result) => {
           console.log(result);
         });
       });

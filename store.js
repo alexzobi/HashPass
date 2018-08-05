@@ -1,5 +1,8 @@
 import { createStore } from 'redux';
 
+// initial state
+
+const initialState = {username: "", details:{}}
 
 // Action Types
 
@@ -12,13 +15,14 @@ export const getUser = ()=>{
   return { type: GET_USER }
 }
 
-export const setUser = (user)=>{
+export const setUser = (username, details)=>{
+  const user = {username, details}
   return { type: SET_USER, user }
 }
 
 // Reducer
 
-const reducer = (state={}, action) => {
+const reducer = (state=initialState, action) => {
   switch (action.type) {
 
     case GET_USER:

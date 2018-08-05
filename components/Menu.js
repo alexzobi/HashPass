@@ -7,18 +7,18 @@ export default class Menu extends Component{
 
   render(){
     const { navigate } = this.props.navigation;
-    const password = this.props.navigation.getParam('password','');
-    const user = this.props.navigation.getParam('user','');
-    const username = this.props.navigation.getParam('username','');
+    // const password = this.props.navigation.getParam('password','');
+    // const user = this.props.navigation.getParam('user','');
+    // const username = this.props.navigation.getParam('username','');
     return (
       <View style={styles.container}>
         <View style={styles.menu}>
           <Button style={styles.hash} 
                   title="Hash A Pass" 
-                  onPress={()=>navigate('Hash',{user, password, username})}/>
+                  onPress={()=>navigate('Hash')}/>
           <Button style={styles.check} 
                   title="Check A Pass" 
-                  onPress={()=>navigate('Check',{user, password})}/>
+                  onPress={()=>navigate('Check')}/>
           <Button style={styles.help} 
                   title="Explain To Me" 
                   onPress={()=>console.log("HALLLPPPP")}/>
