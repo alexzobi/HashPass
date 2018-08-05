@@ -9,20 +9,21 @@ export default class Check extends Component{
     super(props);
     this.state = {
       account: '',
-      salt: ''
+      hashedPass:''
     }
   }
 
   handleClick = ()=>{
-    const {salt, account} = this.state;
+    const { account } = this.state;
     const password = this.props.navigation.getParam('password','');
     const user = this.props.navigation.getParam('user','');
+    const { salt, length } = user.accounts[account]
     const hashedPass = hash(password, salt, length);
     this.setState({hashedPass})
   }
 
   render(){
-    const { navigate, goBack } = this.props.navigation;
+    const { navigate } = this.props.navigation;
     const { hashedPass } = this.state;
     return (
       <View style={styles.container}>
@@ -38,7 +39,7 @@ export default class Check extends Component{
                 onPress={this.handleClick}/>
 
         <TouchableOpacity style={styles.leave} 
-                          onPress={()=>goBack()}>
+                          onPress={()=>navigate('Menu')}>
           <Text>Back to Menu</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.leave} 

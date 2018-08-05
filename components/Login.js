@@ -27,9 +27,10 @@ export default class Login extends Component{
       try {
         let {username,password} = this.state
         let user = await AsyncStorage.getItem(username);
-        let data = JSON.parse(user);
-        if(data.password===password){
-          navigate('Menu',{user, password});
+        user = JSON.parse(user);
+        console.log(user);
+        if(user.password===password){
+          navigate('Menu',{user, password, username});
         } else {
           this.setState(initialState);
           alert('Back, you fiend of Hell!!!');
@@ -43,10 +44,12 @@ export default class Login extends Component{
     } else {
       try {
         let user = await AsyncStorage.getItem(username)
+        user = JSON.parse(user);
         if (user===null){
           if(password===reEnter){
-            let userObj = {password}
-            AsyncStorage.setItem(username, JSON.stringify(userObj))
+            user = {password,accounts:{}}
+            AsyncStorage.setItem(username, JSON.stringify(user))
+            navigate('Menu',{user, password, username});
           } else {
             this.setState(initialState);
             alert('Passwords Do Not Match');
@@ -116,6 +119,9 @@ export default class Login extends Component{
         <Button onPress={this.handleClick}style={styles.login} title={login? "Log In" : "Create Account"} />
         <TouchableOpacity style={styles.signup} onPress={this.toggleLogin}>
           <Text>{login? "Create Account" : "Log In"}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.signup} onPress={()=>AsyncStorage.clear()}>
+          <Text>Clear Storage</Text>
         </TouchableOpacity>
       </View>
     )

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, 
-        TouchableOpacity, Text, TextInput} from 'react-native';
+        TouchableOpacity, 
+        Text, TextInput, 
+        AsyncStorage} from 'react-native';
 import {Button} from '../utility components';
 import {hash} from '../utility functions';
 
@@ -15,16 +17,29 @@ export default class Hash extends Component{
     }
   }
 
-  handleClick = ()=>{
-    const {salt, length} = this.state;
+  handleClick = async ()=>{
+    const {salt, length, account} = this.state;
     const password = this.props.navigation.getParam('password','');
     const user = this.props.navigation.getParam('user','');
+    const username = this.props.navigation.getParam('username','');
+
     const hashedPass = hash(password, salt, length);
     this.setState({hashedPass})
+    user.accounts[account] = {salt, length}
+    console.log('hash click', username, user)
+    try {
+      await AsyncStorage.setItem(username, JSON.stringify(user),() => {
+        AsyncStorage.getItem(username, (err, result) => {
+          console.log(result);
+        });
+      });
+    } catch(error){
+      alert(error);
+    }   
   }
 
   render(){
-    const { navigate, goBack } = this.props.navigation;
+    const { navigate } = this.props.navigation;
     const { hashedPass } = this.state;
     return (
       <View style={styles.container}>
@@ -48,7 +63,7 @@ export default class Hash extends Component{
                 onPress={this.handleClick}/>
 
         <TouchableOpacity style={styles.leave} 
-                          onPress={()=>goBack()}>
+                          onPress={()=>navigate('Menu')}>
           <Text>Back to Menu</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.leave} 
