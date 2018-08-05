@@ -4,7 +4,7 @@ import {StyleSheet, View,
         Text, TextInput, 
         AsyncStorage} from 'react-native';
 import {Button} from '../utility components';
-import {hash} from '../utility functions';
+import { hash } from '../utility functions';
 import store from '../store';
 
 export default class Hash extends Component{
@@ -29,10 +29,10 @@ export default class Hash extends Component{
 
   handleClick = async ()=>{
     const {salt, length, account, user} = this.state;
-    const hashedPass = hash(user.details.password, salt, length);
+    console.log('store state', user)
+    const hashedPass = hash(user.password, salt, length);
     this.setState({hashedPass})
     user.details.accounts[account] = {salt, length};
-    console.log('store state', user)
     try {
       await AsyncStorage.setItem(user.username, JSON.stringify(user.details),() => {
         AsyncStorage.getItem(user.username, (err, result) => {

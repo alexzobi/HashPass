@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 
 // initial state
 
-const initialState = {username: "", details:{}}
+const initialState = {username: "", password: "", details:{}}
 
 // Action Types
 
@@ -15,8 +15,8 @@ export const getUser = ()=>{
   return { type: GET_USER }
 }
 
-export const setUser = (username, details)=>{
-  const user = {username, details}
+export const setUser = (username, password, details)=>{
+  const user = {username, password, details}
   return { type: SET_USER, user }
 }
 

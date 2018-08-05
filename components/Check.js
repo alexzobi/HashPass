@@ -25,10 +25,8 @@ export default class Check extends Component{
 
   handleClick = ()=>{
     const { account, user } = this.state;
-    // const password = this.props.navigation.getParam('password','');
-    // const user = this.props.navigation.getParam('user','');
     const { salt, length } = user.details.accounts[account];
-    const hashedPass = hash(user.details.password, salt, length);
+    const hashedPass = hash(user.password, salt, length);
     this.setState({hashedPass});
   }
 

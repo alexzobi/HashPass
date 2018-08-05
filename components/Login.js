@@ -5,6 +5,7 @@ import {StyleSheet, View,
         AsyncStorage} from 'react-native';
 import {Button} from '../utility components';
 import store, { setUser } from '../store';
+import { hash } from '../utility functions';
 
 const initialState = {
   username: "",
@@ -12,7 +13,8 @@ const initialState = {
   passHide: "",
   reEnter: "",
   reEnterHide: "",
-  login: true
+  login: true,
+  salt: "",
 };
 
 export default class Login extends Component{
@@ -30,16 +32,16 @@ export default class Login extends Component{
   }
 
   handleClick = async ()=>{
-    const {username, password, reEnter} = this.state;
+    const {username, password, reEnter, salt} = this.state;
     const { navigate } = this.props.navigation;
     if(this.state.login){
       try {
         let {username,password} = this.state
         let user = await AsyncStorage.getItem(username);
         user = JSON.parse(user);
-        console.log('longin',user);
-        if(user.password===password){
-          store.dispatch(setUser(username, user));
+        console.log('login',user);
+        if(user.hashedPass===hash(password, salt, 50)){
+          store.dispatch(setUser(username, password, user));
           navigate('Menu');
         } else {
           this.setState(initialState);
@@ -57,7 +59,9 @@ export default class Login extends Component{
         user = JSON.parse(user);
         if (user===null){
           if(password===reEnter){
-            user = {password,accounts:{}}
+            let hashedPass = hash(password, salt, 50);
+            user = {hashedPass,accounts:{}};
+            store.dispatch(setUser(username, password, user));
             AsyncStorage.setItem(username, JSON.stringify(user))
             navigate('Menu');
           } else {
@@ -104,12 +108,12 @@ export default class Login extends Component{
   }
   
   render(){
-    const {username,login, passHide,reEnterHide} = this.state;
+    const {username,login, passHide,reEnterHide, salt} = this.state;
     return (
       <View style={styles.container}>
         <Image resizeMethod='auto' style={styles.logo} 
                source={require('../public/images/combo.png')} />
-        <TextInput onChangeText={(text)=>this.setState({username: text})} 
+        <TextInput onChangeText={(username)=>this.setState({username})} 
                    placeholder='Username'
                    value={username} 
                    underlineColorAndroid='transparent' 
@@ -117,6 +121,11 @@ export default class Login extends Component{
         <TextInput onChangeText={(text)=>this.hidePassword(text)}
                    value={passHide} 
                    placeholder='Password'
+                   underlineColorAndroid='transparent' 
+                   style={styles.input}/>
+        <TextInput onChangeText={(salt)=>this.setState({salt})}
+                   value={salt} 
+                   placeholder='Salt'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         { login ? null : 
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#E8423F',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
   },
   input: {
     marginBottom: 15,
@@ -161,9 +170,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   logo: {
-    margin: 30,
-    width: 175,
-    height: 275
+    width: 275,
+    height: 450,
+    position: 'absolute',
   },
   signup: {
     padding: 10
