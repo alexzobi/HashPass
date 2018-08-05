@@ -7,9 +7,6 @@ export default class Menu extends Component{
 
   render(){
     const { navigate } = this.props.navigation;
-    // const password = this.props.navigation.getParam('password','');
-    // const user = this.props.navigation.getParam('user','');
-    // const username = this.props.navigation.getParam('username','');
     return (
       <View style={styles.container}>
         <View style={styles.menu}>

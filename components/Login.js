@@ -14,7 +14,6 @@ const initialState = {
   reEnter: "",
   reEnterHide: "",
   login: true,
-  salt: "",
 };
 
 export default class Login extends Component{
@@ -32,15 +31,14 @@ export default class Login extends Component{
   }
 
   handleClick = async ()=>{
-    const {username, password, reEnter, salt} = this.state;
+    const {username, password, reEnter} = this.state;
     const { navigate } = this.props.navigation;
     if(this.state.login){
       try {
         let {username,password} = this.state
         let user = await AsyncStorage.getItem(username);
         user = JSON.parse(user);
-        console.log('login',user);
-        if(user.hashedPass===hash(password, salt, 50)){
+        if(user.hashedPass===hash(password, username, 50)){
           store.dispatch(setUser(username, password, user));
           navigate('Menu');
         } else {
@@ -59,7 +57,7 @@ export default class Login extends Component{
         user = JSON.parse(user);
         if (user===null){
           if(password===reEnter){
-            let hashedPass = hash(password, salt, 50);
+            let hashedPass = hash(password, username, 50);
             user = {hashedPass,accounts:{}};
             store.dispatch(setUser(username, password, user));
             AsyncStorage.setItem(username, JSON.stringify(user))
@@ -108,7 +106,7 @@ export default class Login extends Component{
   }
   
   render(){
-    const {username,login, passHide,reEnterHide, salt} = this.state;
+    const {username,login, passHide,reEnterHide} = this.state;
     return (
       <View style={styles.container}>
         <Image resizeMethod='auto' style={styles.logo} 
@@ -121,11 +119,6 @@ export default class Login extends Component{
         <TextInput onChangeText={(text)=>this.hidePassword(text)}
                    value={passHide} 
                    placeholder='Password'
-                   underlineColorAndroid='transparent' 
-                   style={styles.input}/>
-        <TextInput onChangeText={(salt)=>this.setState({salt})}
-                   value={salt} 
-                   placeholder='Salt'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         { login ? null : 

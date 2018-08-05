@@ -29,7 +29,6 @@ export default class Hash extends Component{
 
   handleClick = async ()=>{
     const {salt, length, account, user} = this.state;
-    console.log('store state', user)
     const hashedPass = hash(user.password, salt, length);
     this.setState({hashedPass})
     user.details.accounts[account] = {salt, length};
