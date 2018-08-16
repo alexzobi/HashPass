@@ -53,7 +53,6 @@ export default class Hash extends Component{
   validateLength = (num) =>{
     let length = Number(num);
     if(!length || length<12){
-      console.log('falsy!!!');
       this.setState({invalidLength: true})
     } else {
       this.setState({length, invalidLength:false});

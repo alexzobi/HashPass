@@ -106,6 +106,13 @@ export default class Login extends Component{
     let status = this.state.login;
     this.setState({login: !status})
   }
+
+  isDisabled = () =>{
+    const {username, password, reEnter, login } = this.state;
+    if(!username.length || !password.length) return true;
+    if(!login && !reEnter.length) return true;
+    return false;
+  }
   
   render(){
     const {username,login, passHide,reEnterHide} = this.state;
@@ -133,7 +140,10 @@ export default class Login extends Component{
                      underlineColorAndroid='transparent' 
                      style={styles.input}/>
         }
-        <Button onPress={this.handleClick}style={styles.login} title={login? "Log In" : "Create Account"} />
+        <Button onPress={this.handleClick}
+                style={styles.login}
+                title={login? "Log In" : "Create Account"}
+                disabled={this.isDisabled()}/>
         <TouchableOpacity style={styles.signup} onPress={this.toggleLogin}>
           <Text>{login? "Create Account" : "Log In"}</Text>
         </TouchableOpacity>
