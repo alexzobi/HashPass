@@ -1,5 +1,5 @@
 import React from 'react';
-import { Login, Menu, Hash, Check } from './components';
+import { Login, Menu, Hash, Check, Help } from './components';
 import { createSwitchNavigator } from 'react-navigation';
 
 const RootStack = createSwitchNavigator(
@@ -7,7 +7,8 @@ const RootStack = createSwitchNavigator(
     Login,
     Menu,
     Hash,
-    Check
+    Check,
+    Help
   },
   {
     initialRouteName: 'Login'
@@ -15,7 +16,11 @@ const RootStack = createSwitchNavigator(
 );
 
 export default class App extends React.Component {
+  setScreenOrientation() {
+    Expo.ScreenOrientation.allow(Expo.ScreenOrientation.Orientation.PORTRAIT);
+  }
   render() {
+    this.setScreenOrientation();
     return <RootStack />
   }
 }

@@ -11,7 +11,7 @@ export default class Menu extends Component{
     return (
       <View style={styles.container}>
         <Image resizeMethod='scale' style={styles.logo} 
-              source={require('../public/images/background.png')} />
+               source={require('../public/images/background.png')} />
         <View style={styles.menu}>
           <Button style={styles.hash} 
                   title="Hash A Pass" 
@@ -21,7 +21,7 @@ export default class Menu extends Component{
                   onPress={()=>navigate('Check')}/>
           <Button style={styles.help} 
                   title="Explain To Me" 
-                  onPress={()=>console.log("HALLLPPPP")}/>
+                  onPress={()=>navigate('Help')}/>
           <TouchableOpacity style={styles.logout} 
                             onPress={()=>navigate('Login')}>
             <Text>Log Out</Text>

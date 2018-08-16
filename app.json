@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "slug": "hash-pass",
     "sdkVersion": "27.0.0",
+    "orientation": "portrait",
     "ios": {
       "bundleIdentifier": "com.hashpass.hashpass"
     },
