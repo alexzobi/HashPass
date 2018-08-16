@@ -3,8 +3,14 @@ import {StyleSheet, View,
         TouchableOpacity,
         Text, Image} from 'react-native';
 import {Button} from '../utility components';
+import store, { logOut } from '../store';
 
 export default class Menu extends Component{
+
+  handleLogOut = () =>{
+    store.dispatch(logOut());
+    this.props.navigation.navigate('Login');
+  }
 
   render(){
     const { navigate } = this.props.navigation;
@@ -23,7 +29,7 @@ export default class Menu extends Component{
                   title="Explain To Me" 
                   onPress={()=>navigate('Help')}/>
           <TouchableOpacity style={styles.logout} 
-                            onPress={()=>navigate('Login')}>
+                            onPress={this.handleLogOut}>
             <Text>Log Out</Text>
           </TouchableOpacity>
         </View>

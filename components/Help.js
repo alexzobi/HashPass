@@ -1,25 +1,41 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, 
-        TouchableOpacity,
         Text, Image,
-        ScrollView} from 'react-native';
+        ScrollView, BackHandler} from 'react-native';
 import {Button} from '../utility components';
 
-const Help = (props) =>{
-  const { navigate } = props.navigation;
-
-  return (
-    <View style={styles.container}>
-      <Image resizeMethod='scale' style={styles.logo} 
-            source={require('../public/images/background.png')} />
-      <ScrollView style={styles.scroll}>
-        <Text style={styles.lecture} textBreakStrategy="simple">{text}</Text>
-        <Button style={styles.button}
-                title="Got it!" 
-                onPress={()=>navigate('Menu')}/>
-      </ScrollView>
-    </View>
-  )
+class Help extends Component{
+  
+  componentDidMount () {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+    
+  }
+  
+  componentWillUnmount () {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+  }
+  
+  handleBackPress = () => {
+    this.props.navigation.navigate('Menu');
+    return true;
+  }
+  
+  render(){
+    
+    const { navigate } = this.props.navigation;
+    return (
+      <View style={styles.container}>
+        <Image resizeMethod='scale' style={styles.logo} 
+              source={require('../public/images/background.png')} />
+        <ScrollView style={styles.scroll}>
+          <Text style={styles.lecture} textBreakStrategy="simple">{text}</Text>
+          <Button style={styles.button}
+                  title="Got it!" 
+                  onPress={()=>navigate('Menu')}/>
+        </ScrollView>
+      </View>
+    )
+  }
 }
 
 export default Help

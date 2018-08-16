@@ -3,10 +3,10 @@ import {StyleSheet, KeyboardAvoidingView,
         TouchableOpacity, 
         Text, TextInput, 
         AsyncStorage, Image,
-        Keyboard} from 'react-native';
+        Keyboard, BackHandler} from 'react-native';
 import {Button} from '../utility components';
 import { hash } from '../utility functions';
-import store from '../store';
+import store, { logOut } from '../store';
 
 export default class Hash extends Component{
   constructor(props){
@@ -22,12 +22,25 @@ export default class Hash extends Component{
 
   componentDidMount () {
     this.unsubscribe = store.subscribe(() => this.setState({user: store.getState()}));
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+
   }
 
   componentWillUnmount () {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
     this.unsubscribe();
   }
 
+  handleBackPress = () => {
+    this.props.navigation.navigate('Menu');
+    return true;
+  }
+
+  handleLogOut = () =>{
+    store.dispatch(logOut());
+    this.props.navigation.navigate('Login');
+  }
+  
   handleClick = async ()=>{
     Keyboard.dismiss();
     const {salt, length, account, user} = this.state;
@@ -69,7 +82,7 @@ export default class Hash extends Component{
           <Text>Back to Menu</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.leave} 
-                          onPress={()=>navigate('Login')}>
+                          onPress={this.handleLogOut}>
           <Text>Log Out</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
