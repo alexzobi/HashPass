@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, 
+import {StyleSheet, KeyboardAvoidingView, 
         TouchableOpacity, Text, 
         TextInput, Image,
         Keyboard, BackHandler} from 'react-native';
 import {Button} from '../utility components';
 import {hash} from '../utility functions';
-import store, {logOut} from '../store';
+import store from '../store';
 
 export default class Check extends Component{
   constructor(props){
@@ -33,11 +33,6 @@ export default class Check extends Component{
     return true;
   }
 
-  handleLogOut = () =>{
-    store.dispatch(logOut());
-    this.props.navigation.navigate('Login');
-  }
-
   handleClick = ()=>{
     Keyboard.dismiss();
     const { account, user } = this.state;
@@ -52,32 +47,33 @@ export default class Check extends Component{
 
   render(){
     const { navigate } = this.props.navigation;
-    const { hashedPass } = this.state;
+    const { hashedPass, account } = this.state;
+    const isDisabled = account.length ? false: true;
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Image resizeMethod='scale' style={styles.logo} 
                source={require('../public/images/background.png')} />
         <TextInput onChangeText={(text)=>this.setState({account: text})} 
                    placeholder='Account'
+                   maxLength={14}
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         <TextInput style={[styles.input, {fontSize:15}]} 
                    value={hashedPass}
-                   placeholder="Your Password"
+                   selectTextOnFocus
+                   multiline
+                   placeholder="Result"
                    underlineColorAndroid='transparent' />
         <Button style={styles.hash} 
                 title="Check It!" 
-                onPress={this.handleClick}/>
+                onPress={this.handleClick}
+                disabled={isDisabled}/>
 
         <TouchableOpacity style={styles.leave} 
                           onPress={()=>navigate('Menu')}>
           <Text>Back to Menu</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.leave} 
-                          onPress={this.handleLogOut}>
-          <Text>Log Out</Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -96,10 +92,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     width: 275,
-    height: 50,
+    minHeight: 50,
     textAlign: 'center',
     fontSize: 30,
-    
+    padding: 5,
   },
   hash: {
     width: 200,

@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import {StyleSheet, KeyboardAvoidingView, 
-        TouchableOpacity, 
+        TouchableOpacity, View,
         Text, TextInput, 
         AsyncStorage, Image,
         Keyboard, BackHandler} from 'react-native';
 import {Button} from '../utility components';
 import { hash } from '../utility functions';
-import store, { logOut } from '../store';
+import store from '../store';
 
 export default class Hash extends Component{
   constructor(props){
@@ -16,7 +16,8 @@ export default class Hash extends Component{
       salt: '',
       length: null,
       hashedPass: '',
-      user: store.getState()
+      user: store.getState(),
+      invalidLength: false,
     }
   }
 
@@ -35,11 +36,6 @@ export default class Hash extends Component{
     this.props.navigation.navigate('Menu');
     return true;
   }
-
-  handleLogOut = () =>{
-    store.dispatch(logOut());
-    this.props.navigation.navigate('Login');
-  }
   
   handleClick = async ()=>{
     Keyboard.dismiss();
@@ -51,39 +47,55 @@ export default class Hash extends Component{
       await AsyncStorage.setItem(user.username, JSON.stringify(user.details));
     } catch(error){
       alert(error);
-    }   
+    } 
+  }
+
+  validateLength = (num) =>{
+    let length = Number(num);
+    if(!length || length<12){
+      console.log('falsy!!!');
+      this.setState({invalidLength: true})
+    } else {
+      this.setState({length, invalidLength:false});
+    }
   }
 
   render(){
     const { navigate } = this.props.navigation;
-    const { hashedPass } = this.state;
+    const { hashedPass, invalidLength, account, length } = this.state;
+    const isDisabled = invalidLength || !account.length || !length ? true : false;
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Image resizeMethod='scale' style={styles.logo} 
                source={require('../public/images/background.png')} />
         <TextInput onChangeText={(text)=>this.setState({account: text, salt: text})} 
                    placeholder='Account'
+                   maxLength={14}
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
-        <TextInput onChangeText={(text)=>this.setState({length: text})} 
+        {
+          invalidLength &&
+          <Text style={styles.validate}>Please enter values 12-99</Text>
+        }
+        <TextInput onChangeText={this.validateLength} 
                    placeholder='Password Length'
+                   maxLength={2}
+                   keyboardType="numeric"
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         <TextInput style={[styles.input, {fontSize:15}]} 
-              value={hashedPass}
-              placeholder="Result"
-              underlineColorAndroid='transparent' />
+                   value={hashedPass}
+                   multiline
+                   placeholder="Result"
+                   selectTextOnFocus
+                   underlineColorAndroid='transparent' />
         <Button style={styles.hash} 
                 title="Hash It!" 
-                onPress={this.handleClick}/>
-
+                onPress={this.handleClick}
+                disabled={isDisabled}/>
         <TouchableOpacity style={styles.leave} 
                           onPress={()=>navigate('Menu')}>
           <Text>Back to Menu</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.leave} 
-                          onPress={this.handleLogOut}>
-          <Text>Log Out</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     )
@@ -104,10 +116,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     width: 275,
-    height: 50,
+    minHeight: 50,
     textAlign: 'center',
     fontSize: 30,
-    
+    padding: 5,    
   },
   hash: {
     width: 200,
@@ -120,5 +132,19 @@ const styles = StyleSheet.create({
   },
   leave: {
     padding: 10
-  }
+  },
+  validate: {
+    height: 50,
+    width: 200,
+    backgroundColor: '#ffafb3',
+    borderColor: '#ff0000',
+    fontSize: 15,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    color: '#ff0000',
+    marginBottom: 5,
+    borderRadius: 5,
+    padding: 5,
+    textAlign: 'center'
+  },
 });

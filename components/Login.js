@@ -115,17 +115,20 @@ export default class Login extends Component{
                source={require('../public/images/background.png')} />
         <TextInput onChangeText={(username)=>this.setState({username})} 
                    placeholder='Username'
-                   value={username} 
+                   value={username}
+                   maxLength={14} 
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         <TextInput onChangeText={(text)=>this.hidePassword(text)}
-                   value={passHide} 
+                   value={passHide}
+                   maxLength={18} 
                    placeholder='Password'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         { login ? null : 
           <TextInput onChangeText={(text)=>this.hideReEnter(text)}
-                     value={reEnterHide} 
+                     value={reEnterHide}
+                     maxLength={18}  
                      placeholder='Re-Enter Pass'
                      underlineColorAndroid='transparent' 
                      style={styles.input}/>

@@ -2,17 +2,17 @@ import React, {Component} from 'react';
 import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
 export default class Button extends Component {
-  constructor(props){
-    super(props);
-    this.style = props.style;
-    this.onPress = props.onPress;
-    }
+
 
   render(){
+    const {disabled, onPress, style, title} = this.props;
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={this.onPress} >
-        <View style={[styles.container, this.style]}>
-          <Text style={styles.text}>{this.props.title}</Text>
+      <TouchableOpacity 
+        disabled={disabled} 
+        activeOpacity={0.5}
+        onPress={onPress} >
+        <View style={[styles.container, style]}>
+          <Text style={styles.text}>{title}</Text>
         </View>
       </TouchableOpacity>
     );
