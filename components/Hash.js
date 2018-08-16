@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, 
+import {StyleSheet, KeyboardAvoidingView, 
         TouchableOpacity, 
         Text, TextInput, 
-        AsyncStorage, Image} from 'react-native';
+        AsyncStorage, Image,
+        Keyboard} from 'react-native';
 import {Button} from '../utility components';
 import { hash } from '../utility functions';
 import store from '../store';
@@ -28,6 +29,7 @@ export default class Hash extends Component{
   }
 
   handleClick = async ()=>{
+    Keyboard.dismiss();
     const {salt, length, account, user} = this.state;
     const hashedPass = hash(user.password, salt, length);
     this.setState({hashedPass})
@@ -43,24 +45,21 @@ export default class Hash extends Component{
     const { navigate } = this.props.navigation;
     const { hashedPass } = this.state;
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Image resizeMethod='scale' style={styles.logo} 
                source={require('../public/images/background.png')} />
-        <TextInput onChangeText={(text)=>this.setState({account: text})} 
+        <TextInput onChangeText={(text)=>this.setState({account: text, salt: text})} 
                    placeholder='Account'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
-        <TextInput onChangeText={(text)=>this.setState({salt: text})} 
-                   placeholder='Salt'
-                   underlineColorAndroid='transparent' 
-                   style={styles.input}/>
         <TextInput onChangeText={(text)=>this.setState({length: text})} 
-                   placeholder='Length'
+                   placeholder='Password Length'
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         <TextInput style={[styles.input, {fontSize:15}]} 
-                   value={hashedPass ? hashedPass:"Result"}
-                   underlineColorAndroid='transparent' />
+              value={hashedPass}
+              placeholder="Result"
+              underlineColorAndroid='transparent' />
         <Button style={styles.hash} 
                 title="Hash It!" 
                 onPress={this.handleClick}/>
@@ -73,7 +72,7 @@ export default class Hash extends Component{
                           onPress={()=>navigate('Login')}>
           <Text>Log Out</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }

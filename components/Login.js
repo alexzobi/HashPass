@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, 
-        TextInput, Image, 
+import {StyleSheet, TextInput, 
         TouchableOpacity, Text,
-        AsyncStorage} from 'react-native';
+        AsyncStorage, Image,
+        KeyboardAvoidingView,
+        Keyboard} from 'react-native';
 import {Button} from '../utility components';
 import store, { setUser } from '../store';
 import { hash } from '../utility functions';
@@ -31,6 +32,7 @@ export default class Login extends Component{
   }
 
   handleClick = async ()=>{
+    Keyboard.dismiss();
     const {username, password, reEnter} = this.state;
     const { navigate } = this.props.navigation;
     if(this.state.login){
@@ -108,7 +110,7 @@ export default class Login extends Component{
   render(){
     const {username,login, passHide,reEnterHide} = this.state;
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Image resizeMethod='scale' style={styles.logo} 
                source={require('../public/images/background.png')} />
         <TextInput onChangeText={(username)=>this.setState({username})} 
@@ -135,7 +137,7 @@ export default class Login extends Component{
         <TouchableOpacity style={styles.signup} onPress={()=>AsyncStorage.clear()}>
           <Text>Clear Storage</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     )
   }
 }

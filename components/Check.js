@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, 
         TouchableOpacity, Text, 
-        TextInput, Image} from 'react-native';
+        TextInput, Image,
+        Keyboard} from 'react-native';
 import {Button} from '../utility components';
 import {hash} from '../utility functions';
 import store from '../store';
@@ -25,10 +26,15 @@ export default class Check extends Component{
   }
 
   handleClick = ()=>{
+    Keyboard.dismiss();
     const { account, user } = this.state;
-    const { salt, length } = user.details.accounts[account];
-    const hashedPass = hash(user.password, salt, length);
-    this.setState({hashedPass});
+    if(!user.details.accounts[account]){
+      alert("Account does not exist");
+    } else {
+      const { salt, length } = user.details.accounts[account];
+      const hashedPass = hash(user.password, salt, length);
+      this.setState({hashedPass});
+    }
   }
 
   render(){
@@ -43,7 +49,8 @@ export default class Check extends Component{
                    underlineColorAndroid='transparent' 
                    style={styles.input}/>
         <TextInput style={[styles.input, {fontSize:15}]} 
-                   value={hashedPass ? hashedPass:"Your Password"}
+                   value={hashedPass}
+                   placeholder="Your Password"
                    underlineColorAndroid='transparent' />
         <Button style={styles.hash} 
                 title="Check It!" 
