@@ -22,7 +22,7 @@ export default class Button extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#006FFF',
+    backgroundColor: '#1b3ae8',
     alignItems: 'center',
     justifyContent: 'center',
     width: 250,

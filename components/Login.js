@@ -109,8 +109,8 @@ export default class Login extends Component{
     const {username,login, passHide,reEnterHide} = this.state;
     return (
       <View style={styles.container}>
-        <Image resizeMethod='auto' style={styles.logo} 
-               source={require('../public/images/combo.png')} />
+        <Image resizeMethod='scale' style={styles.logo} 
+               source={require('../public/images/background.png')} />
         <TextInput onChangeText={(username)=>this.setState({username})} 
                    placeholder='Username'
                    value={username} 
@@ -143,7 +143,6 @@ export default class Login extends Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8423F',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -163,8 +162,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   logo: {
-    width: 275,
-    height: 450,
     position: 'absolute',
   },
   signup: {

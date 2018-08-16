@@ -12,7 +12,7 @@ const hash = (password, salt, length) => {
     8: '*'
   }
   let result = password.toString() + salt.toString();
-  for (let i = 0; i <= 5000; i++) {
+  for (let i = 0; i <= 4000; i++) {
     result = sha512(result);
   }
   result = result.substr(0, length).split('');

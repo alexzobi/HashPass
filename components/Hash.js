@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, View, 
         TouchableOpacity, 
         Text, TextInput, 
-        AsyncStorage} from 'react-native';
+        AsyncStorage, Image} from 'react-native';
 import {Button} from '../utility components';
 import { hash } from '../utility functions';
 import store from '../store';
@@ -33,11 +33,7 @@ export default class Hash extends Component{
     this.setState({hashedPass})
     user.details.accounts[account] = {salt, length};
     try {
-      await AsyncStorage.setItem(user.username, JSON.stringify(user.details),() => {
-        AsyncStorage.getItem(user.username, (err, result) => {
-          console.log(result);
-        });
-      });
+      await AsyncStorage.setItem(user.username, JSON.stringify(user.details));
     } catch(error){
       alert(error);
     }   
@@ -48,6 +44,8 @@ export default class Hash extends Component{
     const { hashedPass } = this.state;
     return (
       <View style={styles.container}>
+        <Image resizeMethod='scale' style={styles.logo} 
+               source={require('../public/images/background.png')} />
         <TextInput onChangeText={(text)=>this.setState({account: text})} 
                    placeholder='Account'
                    underlineColorAndroid='transparent' 
@@ -83,7 +81,6 @@ export default class Hash extends Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8423F',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -105,6 +102,9 @@ const styles = StyleSheet.create({
     height: 20,
     marginBottom: 15,
     borderRadius: 10,
+  },
+  logo: {
+    position: 'absolute',
   },
   leave: {
     padding: 10

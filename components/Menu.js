@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, 
-        TouchableOpacity, Text} from 'react-native';
+        TouchableOpacity,
+        Text, Image} from 'react-native';
 import {Button} from '../utility components';
 
 export default class Menu extends Component{
@@ -9,6 +10,8 @@ export default class Menu extends Component{
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
+        <Image resizeMethod='scale' style={styles.logo} 
+              source={require('../public/images/background.png')} />
         <View style={styles.menu}>
           <Button style={styles.hash} 
                   title="Hash A Pass" 
@@ -33,7 +36,6 @@ export default class Menu extends Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8423F',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -45,16 +47,19 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   hash: {
-    backgroundColor: '#2EE826',
+    backgroundColor: '#2620eb',
     margin: 10
   },
   check: {
-    backgroundColor: '#E8D207',
+    backgroundColor: '#115fff',
     margin: 10
   },
   help: {
-    backgroundColor: '#E8423F',
+    backgroundColor: '#1eb7ff',
     margin: 10
+  },
+  logo: {
+    position: 'absolute',
   },
   logout: {
     padding: 10
